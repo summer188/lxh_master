@@ -80,6 +80,7 @@ class PublicAction extends BaseAction
 	}
 	public function login()
 	{
+//        dump($_POST);exit();
 		//unset($_SESSION);
 		$admin_mod=M('admin');
 		if ($_POST) {
@@ -94,6 +95,22 @@ class PublicAction extends BaseAction
 					$this->error(L('verify_error'));
 				}
 			}
+
+            //smm修改于2016-3-27
+            //密码存入cookie，实现记住密码功能
+            if(empty(cookie('admin_pwd')) && $_POST['password']){
+                cookie('admin_pwd',$_POST['password']);
+            }
+            //cookie中‘remember_login’为用户选择的是否记住密码的事件值
+            if(!empty($_POST['loginFlag'])){
+                if($_POST['loginFlag']=='yes'){
+                    cookie('remember_login','yes');
+                }elseif($_POST['loginFlag']=='no'){
+                    cookie('remember_login','no');
+                }
+                unset($_POST['loginFlag']);
+            }
+
 			//生成认证条件
 			$map  = array();
 			// 支持使用绑定帐号登录
@@ -190,5 +207,10 @@ class PublicAction extends BaseAction
 			$this->success(L('operation_success'));
 		}
 	}
+
+    //记住密码
+    public function rememberPwd(){
+
+    }
 }
 ?>
