@@ -37,8 +37,15 @@ class RoleAction extends BaseAction
 			if($result){
 				$this->error('角色已经存在');
 			}
-			$role_mod->create();
-			$result = $role_mod->add();
+            $data = array(
+                'name' =>$_POST['name'],
+                'remark' => $_POST['remark'],
+                'status' => intval($_POST['status']),
+                'create_time' => time(),
+                'update_time' => time()
+            );
+			$role_mod->create($data);
+			$result = $role_mod->add($data);
 			if($result){
 				$this->success(L('operation_success'), '', '', 'add');
 			}else{
@@ -102,6 +109,8 @@ class RoleAction extends BaseAction
 		}
 		//取出模块授权
 		$modules = D("node")->where("status = 1 and auth_type = 0")->select();
+//        var_dump($modules);
+//        exit();
 		foreach ($modules as $k=>$v) {
 			$modules[$k]['actions'] = D("node")->where("status=1 and auth_type>0 and module='".$v['module']."'")->select();
 		}
