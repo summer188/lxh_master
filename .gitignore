@@ -1,2 +1,4 @@
-Admin/Runtime
-core
+admin/Runtime/*
+core/*
+config.inc.php
+connect.php
